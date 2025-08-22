@@ -1,0 +1,7 @@
+services:
+  pg1:
+    image: oncharterliz/pg-1c-15:latest
+    volumes:
+      - ./testdata:/var/lib/pgpro/1c-15/data
+    ports:
+    - "127.0.0.1:5432:5432"

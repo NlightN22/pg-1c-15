@@ -1,0 +1,117 @@
+name: pg1
+namespace: /1c-pg/
+scope: postgres
+restapi:
+  listen: 0.0.0.0:8008
+  connect_address: pg1.local:8008
+  authentication:
+   username: patroni
+   password: patroni
+etcd:
+ hosts: localhost:2379
+ username: patroni
+ password: patroni
+bootstrap:
+ dcs:
+  ttl: 30
+  loop_wait: 10
+  retry_timeout: 10
+  maximum_lag_on_failover: 1048576
+  master_start_timeout: 10
+  postgresql:
+   use_pg_rewind: true
+   use_slots: true
+   parameters:
+    wal_level: replica
+    hot_standby: "on"
+    wal_keep_segments: 8
+    max_wal_senders: 5
+    max_replication_slots: 5
+    checkpoint_timeout: 30
+ initdb:
+ - auth-host: md5
+ - auth-local: peer
+ - encoding: UTF8
+ - data-checksums
+ - locale: ru_RU.UTF-8
+ pg_hba:
+ - host replication replicator samenet md5
+ - host replication all 127.0.0.1/32 md5
+ - host replication all ::1/128 md5
+ users:
+  usr1cv8:
+   password: usr1cv8
+   options:
+    - superuser
+postgresql:
+ listen: 0.0.0.0:5432
+ connect_address: pg1.local:5432
+ config_dir: /var/lib/pgpro/1c-15/data/
+ bin_dir: /opt/pgpro/1c-15/bin/
+ data_dir: /var/lib/pgpro/1c-15/data/
+ pgpass: /tmp/pgpass
+ authentication:
+   superuser:
+     username: postgres
+     password: postgres
+   replication:
+     username: replicator
+     password: replicator
+   rewind:
+     username: rewind_user
+     password: rewind_user
+ parameters:
+    max_connections: 181
+    dynamic_shared_memory_type: posix
+    seq_page_cost: 0.1
+    random_page_cost: 0.1
+    cpu_operator_cost: 0.0025
+    logging_collector: on
+    log_timezone: 'Europe/Moscow'
+    datestyle: 'iso, dmy'
+    timezone: 'Europe/Moscow'
+    lc_messages: 'ru_RU.UTF-8'
+    lc_monetary: 'ru_RU.UTF-8'
+    lc_numeric: 'ru_RU.UTF-8'
+    lc_time: 'ru_RU.UTF-8'
+    default_text_search_config: 'pg_catalog.russian'
+    temp_buffers: 128MB
+    max_files_per_process: 10000
+    commit_delay: 1000
+    from_collapse_limit: 8
+    join_collapse_limit: 8
+    autovacuum_max_workers: 4 
+    vacuum_cost_limit: 200 
+    autovacuum_naptime: 10s
+    autovacuum_vacuum_scale_factor: 0.01
+    autovacuum_analyze_scale_factor: 0.005
+    max_locks_per_transaction: 512
+    escape_string_warning: off
+    standard_conforming_strings: off
+    shared_preload_libraries: 'online_analyze, plantuner'
+    online_analyze.threshold: 50
+    online_analyze.scale_factor: 0.1
+    online_analyze.enable: on
+    online_analyze.verbose: off
+    online_analyze.min_interval: 10000
+    online_analyze.table_type: 'temporary'
+    plantuner.fix_empty_table: on
+    shared_buffers: 8GB
+    effective_cache_size: 16GB
+    maintenance_work_mem: 1GB
+    checkpoint_completion_target: 0.9
+    wal_buffers: 16MB
+    default_statistics_target: 500
+    effective_io_concurrency: 200
+    work_mem: 13981kB
+    min_wal_size: 2GB
+    max_wal_size: 8GB
+    max_worker_processes: 12
+    max_parallel_workers_per_gather: 6
+    max_parallel_workers: 12
+    max_parallel_maintenance_workers: 4
+tags:
+  nofailover: false
+  noloadbalance: false
+  clonefrom: false
+  nosync: false
