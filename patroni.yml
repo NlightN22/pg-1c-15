@@ -22,9 +22,9 @@ restapi:
 #  database: citus
 #  group: 0  # coordinator
 
-etcd:
+#etcd:
   #Provide host to do the initial discovery of the cluster topology:
-  host: 127.0.0.1:2379
+  #host: 127.0.0.1:2380
   #Or use "hosts" to provide multiple endpoints
   #Could be a comma separated string:
   #hosts: host1:port1,host2:port2
@@ -67,9 +67,10 @@ bootstrap:
       # For kerberos gss based connectivity (discard @.*$)
       #- host replication replicator 127.0.0.1/32 gss include_realm=0
       #- host all all 0.0.0.0/0 gss include_realm=0
+      # For localhost connetions without password
+      #- host all all 127.0.0.1/32 trust
+      #- host all all ::1/128 trust
       - local all postgres peer
-      - host all all 127.0.0.1/32 trust
-      - host all all ::1/128 trust
       - host replication replicator 127.0.0.1/32 md5
       - host all all 0.0.0.0/0 md5
       #  - hostssl all all 0.0.0.0/0 md5
@@ -105,7 +106,7 @@ postgresql:
   connect_address: 127.0.0.1:5432
 
 #  proxy_address: 127.0.0.1:5433  # The address of connection pool (e.g., pgbouncer) running next to Patroni/Postgres. Only for service discovery.
-  data_dir: data/postgresql0
+  data_dir: data
   bin_dir: /opt/pgpro/1c-15/bin/
 #  config_dir:
   pgpass: /tmp/pgpass0

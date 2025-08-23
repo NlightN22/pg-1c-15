@@ -32,16 +32,16 @@ RUN apt-get update -y && \
     # English comment: generate all locales listed in /etc/locale.gen
     locale-gen && \
     # English comment: set default system locale
-    update-locale LANG=ru_RU.UTF-8 && \
+    update-locale LANG=ru_RU.UTF-8
     # Install PostgresPro
-    curl -fsSL https://repo.postgrespro.ru/1c/1c-15/keys/pgpro-repo-add.sh -o /tmp/pgpro-repo-add.sh && \
+RUN curl -fsSL https://repo.postgrespro.ru/1c/1c-15/keys/pgpro-repo-add.sh -o /tmp/pgpro-repo-add.sh && \
     sh /tmp/pgpro-repo-add.sh && \
-    # TODO DELETE apt-get update && \
+    apt-get update && \
     apt-get install -y postgrespro-1c-15 && \
-\    
+    update-rc.d -f postgrespro-1c-15 remove
+   
     # Install Patroni
-    # TODO DELETE apt-get update && \
-    apt-get install -y vim nano less jq haproxy sudo \
+RUN apt-get install -y vim nano less jq haproxy sudo \
                             python3 python3-etcd python3-kazoo python3-pip python3-psycopg2 busybox \
                             net-tools iputils-ping dumb-init && \
     pip3 install --no-cache-dir patroni[etcd] --break-system-packages && \
@@ -117,11 +117,12 @@ RUN if [ "$COMPRESS" = "true" ]; then \
 
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh \
+# Clean up default PGDATA created by PostgresPro and set ownership
+&& rm -rf "$PGDATA" \
 && mkdir -p "$PGDATA" \
-&& chown -R postgres:postgres /docker-entrypoint.sh /var/log "$PGDATA"
-# Allow ALL sudo commands from postgres without password
-# && echo 'Defaults:postgres !requiretty' >> /etc/sudoers \
-# && echo 'postgres ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+&& chown -R postgres:postgres /docker-entrypoint.sh /var/log "$PGDATA" \
+&& chmod 750 "$PGDATA"
+
 
 FROM scratch
 COPY --from=builder / /

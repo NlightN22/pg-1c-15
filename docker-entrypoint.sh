@@ -42,29 +42,8 @@ export PATRONI_SUPERUSER_SSLKEY="${PATRONI_SUPERUSER_SSLKEY:-$PGSSLKEY}"
 export PATRONI_SUPERUSER_SSLCERT="${PATRONI_SUPERUSER_SSLCERT:-$PGSSLCERT}"
 export PATRONI_SUPERUSER_SSLROOTCERT="${PATRONI_SUPERUSER_SSLROOTCERT:-$PGSSLROOTCERT}"
 
-# Run pre-check to ensure data directory is valid
-if ! check-db-dir "$PGDATA"; then
-    # Create directory if it doesn't exist and set ownership/permissions.
-    if [ "$(id -u)" -eq 0 ]; then
-        mkdir -p "$PGDATA"
-        chown postgres:postgres "$PGDATA"
-        chmod 700 "$PGDATA"
-        log_pgdata_info
-    else
-        # running as non-root (e.g. USER postgres). Try creating directory; if ownership or perms wrong, instruct user.
-        if ! mkdir -p "$PGDATA" 2>/dev/null; then
-            echo "ERROR: cannot create $PGDATA. Create it on the host and set owner to uid $(id -u postgres) gid $(id -g postgres) and mode 700"
-            log_pgdata_info
-            exit 1
-        fi
-        # best-effort to set permissions (may fail without root)
-        chmod 700 "$PGDATA" 2>/dev/null || true
-        log_pgdata_info
-    fi
-fi
-
-# Start Postgres Pro 1C with specified config
-# exec su - postgres -s /bin/bash -c "/opt/pgpro/1c-15/bin/postgres -D '$PGDATA' -c 'config_file=$PGDATA/postgresql.conf'"
+# Create password file for postgrespro
+echo "$PATRONI_SUPERUSER_PASSWORD" > /tmp/pgpass0
 
 # Start Patroni
 exec dumb-init patroni patroni.yml
