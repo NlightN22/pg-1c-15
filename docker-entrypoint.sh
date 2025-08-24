@@ -18,6 +18,11 @@ if [ -z "$PATRONI_ETCD3_HOSTS" ] && [ -z "$PATRONI_ZOOKEEPER_HOSTS" ]; then
     etcd --data-dir /tmp/etcd.data -advertise-client-urls=$PATRONI_ETCD_URL -listen-client-urls=http://0.0.0.0:2379 > /var/log/etcd.log 2> /var/log/etcd.err &
 fi
 
+# Ensure correct permissions for the data directory
+if [ "$(stat -c %a $PGDATA)" != "750" ]; then
+    chmod 750 $PGDATA
+fi
+
 # Set standard Patroni environment variables
 export PATRONI_SCOPE
 export PATRONI_NAMESPACE
