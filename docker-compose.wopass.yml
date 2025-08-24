@@ -12,12 +12,6 @@ services:
         PATRONI_NAME: pg1
         PATRONI_SCOPE: pg-cluster
         PATRONI_ETCD3_HOSTS: "'etcd1:2379','etcd2:2379','etcd3:2379'"
-        PATRONI_ETCD3_USERNAME: patroni
-        PATRONI_ETCD3_PASSWORD: mMTQeUaI009PaQ9V
-        PATRONI_REPLICATION_USERNAME: replicator
-        PATRONI_REPLICATION_PASSWORD: UbE273fcyLX4sG93
-        PATRONI_SUPERUSER_USERNAME: postgres
-        PATRONI_SUPERUSER_PASSWORD: 7fNoajiZIWjiAwEk
 
   pg2:
     image: oncharterliz/pg-1c-15:latest
@@ -29,12 +23,6 @@ services:
         PATRONI_NAME: pg2
         PATRONI_SCOPE: pg-cluster
         PATRONI_ETCD3_HOSTS: "'etcd1:2379','etcd2:2379','etcd3:2379'"
-        PATRONI_ETCD3_USERNAME: patroni
-        PATRONI_ETCD3_PASSWORD: mMTQeUaI009PaQ9V
-        PATRONI_REPLICATION_USERNAME: replicator
-        PATRONI_REPLICATION_PASSWORD: UbE273fcyLX4sG93
-        PATRONI_SUPERUSER_USERNAME: postgres
-        PATRONI_SUPERUSER_PASSWORD: 7fNoajiZIWjiAwEk
 
   psql-client:
     image: postgres:15-alpine
