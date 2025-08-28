@@ -33,7 +33,7 @@ retry_timeout: 10
 ttl: 30
 ```
 
-## recommended config:
+## recommended config for 1C:
 ```yaml
 postgresql:
   parameters:
