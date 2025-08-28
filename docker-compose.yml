@@ -2,7 +2,7 @@ services:
   pg1:
     image: oncharterliz/pg-1c-15:latest
     volumes:
-      - pg1-data:/var/lib/pgpro/1c-15/data
+      - pg1-data:/var/lib/pgpro/1c-15/data # chown -R 999:1000 $YOUR_HOST_DIR
     ports:
     - "127.0.0.1:5432:5432"
     - "127.0.0.1:8008:8008"
