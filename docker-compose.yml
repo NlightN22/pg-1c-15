@@ -18,6 +18,8 @@ services:
         PATRONI_REPLICATION_PASSWORD: UbE273fcyLX4sG93
         PATRONI_SUPERUSER_USERNAME: postgres
         PATRONI_SUPERUSER_PASSWORD: 7fNoajiZIWjiAwEk
+    restart: unless-stopped
+    shm_size: "2g"
 
   pg2:
     image: oncharterliz/pg-1c-15:latest
@@ -35,6 +37,8 @@ services:
         PATRONI_REPLICATION_PASSWORD: UbE273fcyLX4sG93
         PATRONI_SUPERUSER_USERNAME: postgres
         PATRONI_SUPERUSER_PASSWORD: 7fNoajiZIWjiAwEk
+    restart: unless-stopped
+    shm_size: "2g"
 
   psql-client:
     image: postgres:15-alpine
