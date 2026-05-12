@@ -27,12 +27,14 @@ RUN apt-get update -y && \
         python3-dev \
         build-essential \
         libpq-dev && \
-    # English comment: enable Russian UTF-8 locale in locale.gen
-    echo "ru_RU.UTF-8 UTF-8" > /etc/locale.gen && \
-    # English comment: generate all locales listed in /etc/locale.gen
+    # enable Russian UTF-8 locale in locale.gen, generate all locales listed in /etc/locale.gen, set default system locale
+    printf '%s\n' \
+        'ru_RU.UTF-8 UTF-8' \
+        'en_US.UTF-8 UTF-8' \
+        > /etc/locale.gen && \
     locale-gen && \
-    # English comment: set default system locale
-    update-locale LANG=ru_RU.UTF-8
+    update-locale LANG=ru_RU.UTF-8 LC_ALL=ru_RU.UTF-8
+    
     # Install PostgresPro
 RUN curl -fsSL https://repo.postgrespro.ru/1c/1c-15/keys/pgpro-repo-add.sh -o /tmp/pgpro-repo-add.sh && \
     sh /tmp/pgpro-repo-add.sh && \

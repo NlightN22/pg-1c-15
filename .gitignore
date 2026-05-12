@@ -1,4 +1,4 @@
 /testdata
 /testdata/*
-/cluster
-/cluster/*
+/.idea
+.idea/*
