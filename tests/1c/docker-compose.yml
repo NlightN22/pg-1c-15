@@ -1,0 +1,18 @@
+services:
+  srv1c:
+    image: userlexey/1c
+    container_name: test-srv1c
+    hostname: srv1ck8s
+    ports:
+      - "1540-1591:1540-1591"
+      - "8080:80"
+    volumes:
+      - ./scripts:/opt/1c-tests:ro
+    entrypoint: ["bash", "/opt/1c-tests/start-server.sh"]
+    networks:
+      - postgres-net
+
+networks:
+  postgres-net:
+    external: true
+    name: docker_default
