@@ -141,7 +141,6 @@ WORKDIR $PGHOME
 
 # Environment variables for locale and Postgres data directory
 ENV LANG=ru_RU.UTF-8 \
-    LANGUAGE=ru_RU:ru \
     LC_ALL=ru_RU.UTF-8 \
     DEBIAN_FRONTEND=noninteractive
 
